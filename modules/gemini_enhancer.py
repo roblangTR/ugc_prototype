@@ -513,16 +513,17 @@ Generate complete Reuters-compliant metadata following these strict guidelines:
 
 4. SHOTLIST (Reuters format):
    - Start with DATELINE: LOCATION (DATE) (SOURCE – Restrictions)
-   - Number each shot (1., 2., 3., etc.)
+   - Number each shot ONLY when there is a clear cut or scene change
+   - Use "/" to separate continuous action changes within the SAME shot
+   - Use "," for multiple elements visible simultaneously in one shot
    - Use -ing verbs for descriptions
    - Describe action, NOT camera movements
    - DO NOT use: CUTAWAY, WIDE, PAN, TILT, VIEW OF
-   - Use "/" for shot changes within same sequence
-   - Use "," for multiple elements in one shot
+   - IMPORTANT: For continuous footage with evolving action, use "/" not separate numbers
    - Example format:
      DATELINE: {location.upper()} ({date.upper()}) ({source.upper()} – {restrictions})
-     1. SMOKE RISING FROM DESTROYED BUILDINGS
-     2. DEBRIS SCATTERED ON STREET / DAMAGED VEHICLES
+     1. SMOKE RISING FROM DESTROYED BUILDINGS / DEBRIS SCATTERED ON STREET / DAMAGED VEHICLES
+     2. (Only if there's a clear cut to a different scene)
 
 5. STORY (Reuters news style):
    - 3-4 paragraphs
