@@ -21,6 +21,7 @@ from typing import Optional
 
 from modules.auth import initialize_auth, get_auth_instance
 from modules.gemini_enhancer import GeminiEnhancer
+from modules.slate_workflow import SlateWorkflow
 
 # Configure logging
 logging.basicConfig(
@@ -45,21 +46,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Global Gemini enhancer instance
+# Global instances
 enhancer: Optional[GeminiEnhancer] = None
+slate_workflow: Optional[SlateWorkflow] = None
 
-# Create uploads directory
+# Create directories
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
 
 OUTPUT_DIR = Path("outputs")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
+FINAL_DIR = Path("final_videos")
+FINAL_DIR.mkdir(exist_ok=True)
+
+# Slate background path
+SLATE_BACKGROUND = os.getenv(
+    'SLATE_BACKGROUND_PATH',
+    'app/assets/reuters_slate_background.jpg'
+)
+
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialize authentication and Gemini on startup"""
-    global enhancer
+    """Initialize authentication, Gemini, and slate workflow on startup"""
+    global enhancer, slate_workflow
     
     try:
         logger.info("Starting UGC Metadata Generator...")
@@ -71,6 +82,17 @@ async def startup_event():
         # Create Gemini enhancer
         enhancer = GeminiEnhancer()
         logger.info("✓ Gemini Enhancer initialized")
+        
+        # Initialize slate workflow
+        if os.path.exists(SLATE_BACKGROUND):
+            slate_workflow = SlateWorkflow(
+                background_image_path=SLATE_BACKGROUND,
+                work_dir="temp/slate_work"
+            )
+            logger.info(f"✓ Slate Workflow initialized")
+        else:
+            logger.warning(f"⚠ Slate background not found: {SLATE_BACKGROUND}")
+            logger.warning("  Slate generation will not be available")
         
         logger.info("=" * 60)
         logger.info("UGC Metadata Generator is ready!")
@@ -100,7 +122,8 @@ async def health_check():
         "status": "healthy",
         "workspace_id": auth.workspace_id,
         "model": auth.model_name,
-        "gemini_ready": enhancer is not None
+        "gemini_ready": enhancer is not None,
+        "slate_ready": slate_workflow is not None
     }
 
 
@@ -250,6 +273,120 @@ async def get_output(filename: str):
     except Exception as e:
         logger.error(f"Error reading output: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/generate-slate")
+async def generate_slate(
+    guid: str = Form(...),
+    metadata_file: str = Form(...),
+    original_video: str = Form(...)
+):
+    """
+    Generate slate and stitch to video
+    
+    Args:
+        guid: GUID for edit number extraction
+        metadata_file: Filename of metadata JSON in outputs/
+        original_video: Filename of original video in uploads/
+        
+    Returns:
+        Final video information with download path
+    """
+    if slate_workflow is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Slate workflow not initialized (background image missing)"
+        )
+    
+    try:
+        # Validate GUID
+        if not slate_workflow.validate_guid(guid):
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid GUID format. Please provide at least 4 hex characters."
+            )
+        
+        # Load metadata
+        metadata_path = OUTPUT_DIR / metadata_file
+        if not metadata_path.exists():
+            raise HTTPException(status_code=404, detail="Metadata file not found")
+        
+        import json
+        with open(metadata_path, 'r') as f:
+            metadata = json.load(f)
+        
+        # Get original video path
+        original_video_path = UPLOAD_DIR / original_video
+        if not original_video_path.exists():
+            raise HTTPException(status_code=404, detail="Original video not found")
+        
+        # Generate output filename
+        edit_number = slate_workflow.extract_edit_number(guid)
+        slug_safe = metadata.get('slug', 'video').replace('/', '_')
+        final_filename = f"{edit_number}_{slug_safe}_final.mp4"
+        final_video_path = FINAL_DIR / final_filename
+        
+        logger.info(f"Generating final video: {final_filename}")
+        
+        # Generate slate and stitch
+        result = slate_workflow.generate_final_video(
+            guid=guid,
+            metadata=metadata,
+            original_video_path=str(original_video_path),
+            output_video_path=str(final_video_path),
+            cleanup=True
+        )
+        
+        return {
+            "success": True,
+            "edit_number": result['edit_number'],
+            "final_video": final_filename,
+            "duration_with_slate": result['duration_with_slate'],
+            "original_duration": result['original_duration'],
+            "resolution": result['resolution'],
+            "download_url": f"/api/download/{final_filename}"
+        }
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to generate slate: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/validate-guid/{guid}")
+async def validate_guid_endpoint(guid: str):
+    """Validate GUID format and extract edit number"""
+    if slate_workflow is None:
+        return {"valid": False, "message": "Slate workflow not available"}
+    
+    is_valid = slate_workflow.validate_guid(guid)
+    edit_number = slate_workflow.extract_edit_number(guid) if is_valid else None
+    
+    return {
+        "valid": is_valid,
+        "edit_number": edit_number,
+        "message": "Valid GUID" if is_valid else "Invalid GUID format (need at least 4 hex characters)"
+    }
+
+
+@app.get("/api/download/{filename}")
+async def download_video(filename: str):
+    """Download final video with slate"""
+    from fastapi.responses import FileResponse
+    
+    file_path = FINAL_DIR / filename
+    
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Video not found")
+    
+    return FileResponse(
+        path=str(file_path),
+        media_type="video/mp4",
+        filename=filename
+    )
 
 
 if __name__ == "__main__":
