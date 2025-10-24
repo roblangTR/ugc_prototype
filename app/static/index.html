@@ -13,13 +13,13 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #E3E3E3;
             min-height: 100vh;
             padding: 20px;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 12px;
@@ -28,7 +28,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #D64000;
             color: white;
             padding: 30px;
             text-align: center;
@@ -46,6 +46,19 @@
 
         .content {
             padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 1200px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .left-column, .right-column {
+            min-width: 0;
         }
 
         .form-group {
@@ -77,7 +90,7 @@
         textarea:focus,
         select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #D64000;
         }
 
         textarea {
@@ -95,13 +108,13 @@
         }
 
         .file-upload:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
+            border-color: #D64000;
+            background: #fff5f0;
         }
 
         .file-upload.dragover {
-            border-color: #667eea;
-            background: #f0f2ff;
+            border-color: #D64000;
+            background: #ffe8dd;
         }
 
         .file-upload input[type="file"] {
@@ -115,12 +128,12 @@
 
         .file-name {
             margin-top: 10px;
-            color: #667eea;
+            color: #D64000;
             font-weight: 600;
         }
 
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #D64000;
             color: white;
             padding: 14px 32px;
             border: none;
@@ -134,7 +147,8 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 20px rgba(214, 64, 0, 0.4);
+            background: #b83600;
         }
 
         .btn:disabled {
@@ -154,8 +168,8 @@
         }
 
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            border: 4px solid #E3E3E3;
+            border-top: 4px solid #D64000;
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -172,7 +186,7 @@
             display: none;
             margin-top: 30px;
             padding: 20px;
-            background: #f8f9ff;
+            background: white;
             border-radius: 8px;
         }
 
@@ -181,7 +195,7 @@
         }
 
         .results h2 {
-            color: #333;
+            color: #404040;
             margin-bottom: 20px;
             font-size: 20px;
         }
@@ -189,21 +203,22 @@
         .metadata-section {
             margin-bottom: 20px;
             padding: 15px;
-            background: white;
+            background: #f5f5f5;
             border-radius: 6px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #D64000;
         }
 
         .metadata-section h3 {
-            color: #667eea;
+            color: #D64000;
             font-size: 14px;
             margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            font-weight: 700;
         }
 
         .metadata-section p {
-            color: #555;
+            color: #404040;
             line-height: 1.6;
             font-size: 14px;
         }
@@ -236,6 +251,114 @@
             font-weight: 600;
             margin-left: 10px;
         }
+
+        .date-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .date-btn {
+            background: white;
+            color: #D64000;
+            border: 2px solid #D64000;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .date-btn:hover {
+            background: #D64000;
+            color: white;
+        }
+
+        .video-player-section {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .video-player-section h3 {
+            color: #404040;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 8px;
+            background: #000;
+        }
+
+        .guid-section {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .guid-section h3 {
+            color: #404040;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .guid-input-group {
+            margin-bottom: 15px;
+        }
+
+        .guid-input-group input {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+        }
+
+        .guid-input-group input.valid {
+            border-color: #4caf50;
+        }
+
+        .guid-input-group input.invalid {
+            border-color: #f44336;
+        }
+
+        .edit-number-display {
+            background: #D64000;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .status-message {
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .status-message.info {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-message.success {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .status-message.warning {
+            background: #fff3e0;
+            color: #f57c00;
+        }
     </style>
 </head>
 <body>
@@ -246,7 +369,8 @@
         </div>
 
         <div class="content">
-            <form id="videoForm">
+            <div class="left-column">
+                <form id="videoForm">
                 <div class="form-group">
                     <label for="eventContext">Event Context *</label>
                     <textarea 
@@ -277,6 +401,10 @@
                         required
                         placeholder="e.g., October 19, 2024"
                     >
+                    <div class="date-buttons">
+                        <button type="button" class="date-btn" onclick="setToday()">Today</button>
+                        <button type="button" class="date-btn" onclick="setYesterday()">Yesterday</button>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -312,10 +440,91 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn" id="submitBtn">
-                    Generate Metadata
-                </button>
-            </form>
+                    <button type="submit" class="btn" id="submitBtn">
+                        Generate Metadata
+                    </button>
+                </form>
+
+                <div class="results" id="results">
+                    <h2>Generated Metadata <span class="success-badge">✓ Complete</span></h2>
+                    
+                    <div class="metadata-section">
+                        <h3>SLUG</h3>
+                        <p id="slug"></p>
+                    </div>
+
+                    <div class="metadata-section">
+                        <h3>HEADLINE</h3>
+                        <p id="headline"></p>
+                    </div>
+
+                    <div class="metadata-section">
+                        <h3>VIDEO SHOWS</h3>
+                        <p id="videoShows"></p>
+                    </div>
+
+                    <div class="metadata-section">
+                        <h3>SHOTLIST</h3>
+                        <p id="dateline" style="font-weight: 600; margin-bottom: 10px;"></p>
+                        <div id="shots"></div>
+                    </div>
+
+                    <div class="metadata-section">
+                        <h3>STORY</h3>
+                        <div id="story"></div>
+                    </div>
+
+                    <div class="metadata-section">
+                        <h3>VERIFICATION</h3>
+                        <p id="verification"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="video-player-section">
+                    <h3>📹 Video Preview</h3>
+                    <video id="videoPlayer" controls style="display: none;">
+                        <source id="videoSource" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div id="noVideo" style="text-align: center; padding: 40px; color: #999;">
+                        <p>Final video will appear here after slate generation</p>
+                    </div>
+                </div>
+
+                <div class="guid-section" id="guidSection" style="display: none;">
+                    <h3>Generate Final Video with Slate</h3>
+                    
+                    <div class="guid-input-group">
+                        <label for="guidInput">Edit GUID *</label>
+                        <input 
+                            type="text" 
+                            id="guidInput" 
+                            placeholder="1234-5678-9ABC-DEF0"
+                            maxlength="19"
+                        >
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            Enter at least 4 hex characters (0-9, A-F)
+                        </small>
+                    </div>
+
+                    <div id="editNumberDisplay" style="display: none;">
+                        <div class="edit-number-display">
+                            Edit Number: <span id="editNumber"></span>
+                        </div>
+                    </div>
+
+                    <div id="slateStatus"></div>
+
+                    <button class="btn" id="generateSlateBtn" disabled>
+                        Generate Final Video with Slate
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content" style="display: block;">
 
             <div class="loading" id="loading">
                 <div class="spinner"></div>
@@ -324,47 +533,35 @@
             </div>
 
             <div class="error" id="error"></div>
-
-            <div class="results" id="results">
-                <h2>Generated Metadata <span class="success-badge">✓ Complete</span></h2>
-                
-                <div class="metadata-section">
-                    <h3>SLUG</h3>
-                    <p id="slug"></p>
-                </div>
-
-                <div class="metadata-section">
-                    <h3>HEADLINE</h3>
-                    <p id="headline"></p>
-                </div>
-
-                <div class="metadata-section">
-                    <h3>VIDEO SHOWS</h3>
-                    <p id="videoShows"></p>
-                </div>
-
-                <div class="metadata-section">
-                    <h3>SHOTLIST</h3>
-                    <p id="dateline" style="font-weight: 600; margin-bottom: 10px;"></p>
-                    <div id="shots"></div>
-                </div>
-
-                <div class="metadata-section">
-                    <h3>STORY</h3>
-                    <div id="story"></div>
-                </div>
-
-                <div class="metadata-section">
-                    <h3>VERIFICATION</h3>
-                    <p id="verification"></p>
-                </div>
-
-                <button class="btn" onclick="location.reload()">Analyze Another Video</button>
-            </div>
         </div>
     </div>
 
     <script>
+        // Date helper functions
+        function formatDate(date) {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                          'July', 'August', 'September', 'October', 'November', 'December'];
+            const month = months[date.getMonth()];
+            const day = date.getDate();
+            const year = date.getFullYear();
+            return `${month} ${day}, ${year}`;
+        }
+
+        function setToday() {
+            const today = new Date();
+            document.getElementById('date').value = formatDate(today);
+        }
+
+        function setYesterday() {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            document.getElementById('date').value = formatDate(yesterday);
+        }
+
+        // Global variables for slate generation
+        let currentMetadataFile = null;
+        let currentVideoFile = null;
+
         const form = document.getElementById('videoForm');
         const fileUpload = document.getElementById('fileUpload');
         const fileInput = document.getElementById('videoFile');
@@ -431,12 +628,19 @@
 
                 const data = await response.json();
 
+                // Store metadata and video filenames for slate generation
+                currentMetadataFile = data.processing.timestamp + '_metadata.json';
+                currentVideoFile = data.processing.video_filename;
+
                 // Display results
                 displayResults(data);
 
                 // Hide loading, show results
                 loading.classList.remove('active');
                 results.classList.add('active');
+                
+                // Show GUID section
+                document.getElementById('guidSection').style.display = 'block';
 
             } catch (err) {
                 console.error('Error:', err);
@@ -487,6 +691,108 @@
                 `;
             }
         }
+
+        // GUID validation and slate generation
+        const guidInput = document.getElementById('guidInput');
+        const generateSlateBtn = document.getElementById('generateSlateBtn');
+        const editNumberDisplay = document.getElementById('editNumberDisplay');
+        const editNumber = document.getElementById('editNumber');
+        const slateStatus = document.getElementById('slateStatus');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoSource = document.getElementById('videoSource');
+        const noVideo = document.getElementById('noVideo');
+
+        guidInput.addEventListener('input', async (e) => {
+            const guid = e.target.value;
+            
+            if (guid.length >= 4) {
+                try {
+                    const response = await fetch(`/api/validate-guid/${encodeURIComponent(guid)}`);
+                    const data = await response.json();
+                    
+                    if (data.valid) {
+                        guidInput.classList.remove('invalid');
+                        guidInput.classList.add('valid');
+                        editNumber.textContent = data.edit_number;
+                        editNumberDisplay.style.display = 'block';
+                        generateSlateBtn.disabled = false;
+                    } else {
+                        guidInput.classList.remove('valid');
+                        guidInput.classList.add('invalid');
+                        editNumberDisplay.style.display = 'none';
+                        generateSlateBtn.disabled = true;
+                    }
+                } catch (err) {
+                    console.error('GUID validation error:', err);
+                }
+            } else {
+                guidInput.classList.remove('valid', 'invalid');
+                editNumberDisplay.style.display = 'none';
+                generateSlateBtn.disabled = true;
+            }
+        });
+
+        generateSlateBtn.addEventListener('click', async () => {
+            const guid = guidInput.value;
+            
+            if (!currentMetadataFile || !currentVideoFile) {
+                alert('Please generate metadata first');
+                return;
+            }
+
+            // Show status
+            slateStatus.innerHTML = '<div class="status-message info">⏳ Generating slate and stitching video... This may take 30-60 seconds</div>';
+            generateSlateBtn.disabled = true;
+
+            try {
+                const formData = new FormData();
+                formData.append('guid', guid);
+                formData.append('metadata_file', currentMetadataFile);
+                formData.append('original_video', currentVideoFile);
+
+                const response = await fetch('/api/generate-slate', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Show success
+                slateStatus.innerHTML = `<div class="status-message success">✓ Final video generated! Edit #${data.edit_number} | Duration: ${data.duration_with_slate}</div>`;
+
+                // Load video in player
+                videoSource.src = data.download_url;
+                videoPlayer.load();
+                videoPlayer.style.display = 'block';
+                noVideo.style.display = 'none';
+
+                // Enable download
+                const downloadBtn = document.createElement('a');
+                downloadBtn.href = data.download_url;
+                downloadBtn.download = data.final_video;
+                downloadBtn.className = 'btn';
+                downloadBtn.style.marginTop = '15px';
+                downloadBtn.style.display = 'block';
+                downloadBtn.textContent = '⬇ Download Final Video';
+                
+                const guidSection = document.getElementById('guidSection');
+                const existingDownload = guidSection.querySelector('a.btn');
+                if (existingDownload) {
+                    existingDownload.remove();
+                }
+                guidSection.appendChild(downloadBtn);
+
+            } catch (err) {
+                console.error('Slate generation error:', err);
+                slateStatus.innerHTML = `<div class="status-message warning">✗ Error: ${err.message}</div>`;
+            } finally {
+                generateSlateBtn.disabled = false;
+            }
+        });
     </script>
 </body>
 </html>
