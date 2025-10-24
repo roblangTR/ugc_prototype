@@ -132,11 +132,20 @@ class SlateGenerator:
         # Get fonts
         font_120 = self._get_font(120, bold=True)
         font_80 = self._get_font(80, bold=True)
+        font_60 = self._get_font(60, bold=True)
         font_48 = self._get_font(48, bold=True)
         
-        # Add edit number / slug (gold/amber, large) - combined on one line
-        combined_title = f"{edit_number} / {slug}"
-        draw.text(self.EDIT_NUMBER_POS, combined_title, font=font_80, fill=self.TITLE_COLOR)
+        # Add edit number (gold/amber, large)
+        draw.text(self.EDIT_NUMBER_POS, edit_number, font=font_120, fill=self.TITLE_COLOR)
+        
+        # Add slug (gold/amber, size depends on length)
+        # Use smaller font if slug is too long
+        if len(slug) > 35:
+            slug_font = font_60
+        else:
+            slug_font = font_80
+        
+        draw.text(self.SLUG_POS, slug, font=slug_font, fill=self.TITLE_COLOR)
         
         # Add content fields (white text)
         y_pos = self.CONTENT_START_Y
