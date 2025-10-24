@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UGC Video Metadata Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .file-upload {
+            border: 2px dashed #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .file-upload.dragover {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 8px;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .results h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .metadata-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+
+        .metadata-section h3 {
+            color: #667eea;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metadata-section p {
+            color: #555;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .shotlist-item {
+            margin-bottom: 8px;
+            padding-left: 15px;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error.active {
+            display: block;
+        }
+
+        .success-badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 UGC Video Metadata Generator</h1>
+            <p>AI-powered Reuters-style metadata generation</p>
+        </div>
+
+        <div class="content">
+            <form id="videoForm">
+                <div class="form-group">
+                    <label for="eventContext">Event Context *</label>
+                    <textarea 
+                        id="eventContext" 
+                        name="event_context" 
+                        required
+                        placeholder="e.g., UGC showing smoke rising out of Gaza neighbourhood after Israeli airstrike"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Location *</label>
+                    <input 
+                        type="text" 
+                        id="location" 
+                        name="location" 
+                        required
+                        placeholder="e.g., Gaza, Nairobi, Kenya"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Date *</label>
+                    <input 
+                        type="text" 
+                        id="date" 
+                        name="date" 
+                        required
+                        placeholder="e.g., October 19, 2024"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="source">Source *</label>
+                    <select id="source" name="source" required>
+                        <option value="">Select source...</option>
+                        <option value="Video obtained by Reuters">Video obtained by Reuters</option>
+                        <option value="Social Media - Twitter">Social Media - Twitter</option>
+                        <option value="Social Media - Instagram">Social Media - Instagram</option>
+                        <option value="Social Media - Facebook">Social Media - Facebook</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="restrictions">Usage Restrictions</label>
+                    <select id="restrictions" name="restrictions">
+                        <option value="Access all">No restrictions (Access all)</option>
+                        <option value="No resale / No archive">No resale / No archive</option>
+                        <option value="No resale / No archive / Must on-screen courtesy">No resale / No archive / Must on-screen courtesy</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Video File *</label>
+                    <div class="file-upload" id="fileUpload">
+                        <input type="file" id="videoFile" name="video" accept="video/*" required>
+                        <div class="file-upload-label">
+                            📹 Click to select or drag and drop video file<br>
+                            <small>Supported: MP4, MOV, AVI, MKV (max 15MB)</small>
+                        </div>
+                        <div class="file-name" id="fileName"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn">
+                    Generate Metadata
+                </button>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing video with Gemini AI...</p>
+                <p><small>This may take 30-60 seconds</small></p>
+            </div>
+
+            <div class="error" id="error"></div>
+
+            <div class="results" id="results">
+                <h2>Generated Metadata <span class="success-badge">✓ Complete</span></h2>
+                
+                <div class="metadata-section">
+                    <h3>SLUG</h3>
+                    <p id="slug"></p>
+                </div>
+
+                <div class="metadata-section">
+                    <h3>HEADLINE</h3>
+                    <p id="headline"></p>
+                </div>
+
+                <div class="metadata-section">
+                    <h3>VIDEO SHOWS</h3>
+                    <p id="videoShows"></p>
+                </div>
+
+                <div class="metadata-section">
+                    <h3>SHOTLIST</h3>
+                    <p id="dateline" style="font-weight: 600; margin-bottom: 10px;"></p>
+                    <div id="shots"></div>
+                </div>
+
+                <div class="metadata-section">
+                    <h3>STORY</h3>
+                    <div id="story"></div>
+                </div>
+
+                <div class="metadata-section">
+                    <h3>VERIFICATION</h3>
+                    <p id="verification"></p>
+                </div>
+
+                <button class="btn" onclick="location.reload()">Analyze Another Video</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('videoForm');
+        const fileUpload = document.getElementById('fileUpload');
+        const fileInput = document.getElementById('videoFile');
+        const fileName = document.getElementById('fileName');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+        const error = document.getElementById('error');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // File upload handling
+        fileUpload.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                fileName.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+            }
+        });
+
+        // Drag and drop
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUpload.classList.add('dragover');
+        });
+
+        fileUpload.addEventListener('dragleave', () => {
+            fileUpload.classList.remove('dragover');
+        });
+
+        fileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+            
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                const file = e.dataTransfer.files[0];
+                fileName.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Hide previous results/errors
+            results.classList.remove('active');
+            error.classList.remove('active');
+
+            // Show loading
+            loading.classList.add('active');
+            submitBtn.disabled = true;
+
+            try {
+                const formData = new FormData(form);
+
+                const response = await fetch('/api/analyze-video', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Display results
+                displayResults(data);
+
+                // Hide loading, show results
+                loading.classList.remove('active');
+                results.classList.add('active');
+
+            } catch (err) {
+                console.error('Error:', err);
+                error.textContent = `Error: ${err.message}`;
+                error.classList.add('active');
+                loading.classList.remove('active');
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+
+        function displayResults(data) {
+            document.getElementById('slug').textContent = data.slug || 'N/A';
+            document.getElementById('headline').textContent = data.headline || 'N/A';
+            document.getElementById('videoShows').textContent = data.video_shows || 'N/A';
+
+            // Shotlist
+            if (data.shotlist) {
+                document.getElementById('dateline').textContent = data.shotlist.dateline || '';
+                
+                const shotsDiv = document.getElementById('shots');
+                shotsDiv.innerHTML = '';
+                
+                if (data.shotlist.shots) {
+                    data.shotlist.shots.forEach(shot => {
+                        const shotDiv = document.createElement('div');
+                        shotDiv.className = 'shotlist-item';
+                        shotDiv.textContent = `${shot.number}. ${shot.description}`;
+                        shotsDiv.appendChild(shotDiv);
+                    });
+                }
+            }
+
+            // Story
+            if (data.story) {
+                const storyDiv = document.getElementById('story');
+                const paragraphs = data.story.split('\\n\\n');
+                storyDiv.innerHTML = paragraphs.map(p => `<p style="margin-bottom: 15px;">${p}</p>`).join('');
+            }
+
+            // Verification
+            if (data.verification) {
+                const verif = data.verification;
+                document.getElementById('verification').innerHTML = `
+                    <strong>Location:</strong> ${verif.location_method || 'N/A'}<br>
+                    <strong>Date:</strong> ${verif.date_method || 'N/A'}<br>
+                    <strong>Confidence:</strong> ${verif.confidence || 'N/A'}
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
