@@ -121,12 +121,13 @@ class VideoStitcher:
         ]
         
         try:
-            result = subprocess.run(cmd, check=True, capture_output=True, stderr=subprocess.PIPE)
+            result = subprocess.run(cmd, check=True, capture_output=True)
             logger.info(f"Slate video created: {output_path}")
             return output_path
         except subprocess.CalledProcessError as e:
-            logger.error(f"Failed to create slate video: {e.stderr.decode()}")
-            raise RuntimeError(f"FFmpeg failed: {e.stderr.decode()}")
+            error_msg = e.stderr.decode() if e.stderr else str(e)
+            logger.error(f"Failed to create slate video: {error_msg}")
+            raise RuntimeError(f"FFmpeg failed: {error_msg}")
     
     def concatenate_videos(
         self,
@@ -168,7 +169,7 @@ class VideoStitcher:
         ]
         
         try:
-            result = subprocess.run(cmd, check=True, capture_output=True, stderr=subprocess.PIPE)
+            result = subprocess.run(cmd, check=True, capture_output=True)
             logger.info(f"Final video created: {output_path}")
             
             # Clean up temp file
@@ -178,5 +179,6 @@ class VideoStitcher:
             return output_path
             
         except subprocess.CalledProcessError as e:
-            logger.error(f"Failed to concatenate videos: {e.stderr.decode()}")
-            raise RuntimeError(f"FFmpeg concatenation failed: {e.stderr.decode()}")
+            error_msg = e.stderr.decode() if e.stderr else str(e)
+            logger.error(f"Failed to concatenate videos: {error_msg}")
+            raise RuntimeError(f"FFmpeg concatenation failed: {error_msg}")
