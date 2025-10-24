@@ -157,13 +157,19 @@ class VideoStitcher:
             f.write(f"file '{os.path.abspath(slate_video_path)}'\n")
             f.write(f"file '{os.path.abspath(original_video_path)}'\n")
         
-        # Concatenate videos
+        # Use concat demuxer with re-encoding to handle interlaced video properly
+        # This preserves the original video's field rate and interlacing
         cmd = [
             'ffmpeg',
             '-f', 'concat',                        # Use concat demuxer
             '-safe', '0',                          # Allow absolute paths
             '-i', concat_list_path,                # Input file list
-            '-c', 'copy',                          # Copy streams (no re-encode)
+            '-c:v', 'libx264',                     # Re-encode video
+            '-preset', 'fast',                     # Fast encoding
+            '-crf', '18',                          # High quality
+            '-r', '25',                            # Force 25fps output (deinterlace 50i to 25p)
+            '-vf', 'yadif',                        # Deinterlace filter
+            '-c:a', 'copy',                        # Copy audio without re-encoding
             '-y',                                  # Overwrite output
             output_path
         ]
