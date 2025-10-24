@@ -111,11 +111,15 @@ class VideoStitcher:
             'ffmpeg',
             '-loop', '1',                          # Loop the image
             '-i', image_path,                      # Input image
+            '-f', 'lavfi',                         # Generate silent audio
+            '-i', 'anullsrc=r=48000:cl=stereo',    # Silent audio track
             '-c:v', 'libx264',                     # Video codec
+            '-c:a', 'aac',                         # Audio codec
             '-t', str(duration),                   # Duration
             '-pix_fmt', 'yuv420p',                 # Pixel format for compatibility
             '-r', str(fps),                        # Frame rate
             '-s', f'{width}x{height}',             # Resolution
+            '-shortest',                           # Stop at shortest stream
             '-y',                                  # Overwrite output
             output_path
         ]
@@ -148,28 +152,21 @@ class VideoStitcher:
         """
         logger.info("Concatenating slate and original video")
         
-        # Create temp directory for concat list
-        temp_dir = os.path.dirname(output_path)
-        concat_list_path = os.path.join(temp_dir, 'concat_list.txt')
-        
-        # Create file list for FFmpeg concat
-        with open(concat_list_path, 'w') as f:
-            f.write(f"file '{os.path.abspath(slate_video_path)}'\n")
-            f.write(f"file '{os.path.abspath(original_video_path)}'\n")
-        
-        # Use concat demuxer with re-encoding to handle interlaced video properly
-        # This preserves the original video's field rate and interlacing
+        # Use filter_complex concat for reliable concatenation
+        # This properly handles timing and avoids duration issues
         cmd = [
             'ffmpeg',
-            '-f', 'concat',                        # Use concat demuxer
-            '-safe', '0',                          # Allow absolute paths
-            '-i', concat_list_path,                # Input file list
-            '-c:v', 'libx264',                     # Re-encode video
+            '-i', slate_video_path,                # Input 1: slate
+            '-i', original_video_path,             # Input 2: original
+            '-filter_complex',
+            '[0:v:0][0:a:0][1:v:0][1:a:0]concat=n=2:v=1:a=1[outv][outa]',  # Concat both video and audio
+            '-map', '[outv]',                      # Map concatenated video
+            '-map', '[outa]',                      # Map concatenated audio
+            '-c:v', 'libx264',                     # Encode video
             '-preset', 'fast',                     # Fast encoding
             '-crf', '18',                          # High quality
-            '-r', '25',                            # Force 25fps output (deinterlace 50i to 25p)
-            '-vf', 'yadif',                        # Deinterlace filter
-            '-c:a', 'copy',                        # Copy audio without re-encoding
+            '-c:a', 'aac',                         # Encode audio
+            '-b:a', '192k',                        # Audio bitrate
             '-y',                                  # Overwrite output
             output_path
         ]
@@ -177,10 +174,6 @@ class VideoStitcher:
         try:
             result = subprocess.run(cmd, check=True, capture_output=True)
             logger.info(f"Final video created: {output_path}")
-            
-            # Clean up temp file
-            if os.path.exists(concat_list_path):
-                os.remove(concat_list_path)
             
             return output_path
             
