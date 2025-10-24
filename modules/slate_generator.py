@@ -18,8 +18,8 @@ class SlateGenerator:
     """Generate Reuters video slate with metadata overlay"""
     
     # Reuters brand colors
-    ORANGE = (214, 64, 0)      # #D64000 - TR Orange
-    WHITE = (255, 255, 255)     # #FFFFFF
+    TITLE_COLOR = (242, 144, 0)  # #F29000 - Gold/Amber for title
+    WHITE = (255, 255, 255)      # #FFFFFF
     
     # Layout constants (coordinates for 1920x1080)
     EDIT_NUMBER_POS = (130, 100)
@@ -134,9 +134,9 @@ class SlateGenerator:
         font_80 = self._get_font(80, bold=True)
         font_48 = self._get_font(48, bold=True)
         
-        # Add edit number / slug (orange, large) - combined on one line
+        # Add edit number / slug (gold/amber, large) - combined on one line
         combined_title = f"{edit_number} / {slug}"
-        draw.text(self.EDIT_NUMBER_POS, combined_title, font=font_80, fill=self.ORANGE)
+        draw.text(self.EDIT_NUMBER_POS, combined_title, font=font_80, fill=self.TITLE_COLOR)
         
         # Add content fields (white text)
         y_pos = self.CONTENT_START_Y
