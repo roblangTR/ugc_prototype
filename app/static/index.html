@@ -629,8 +629,11 @@
                 const data = await response.json();
 
                 // Store metadata and video filenames for slate generation
-                currentMetadataFile = data.processing.timestamp + '_metadata.json';
-                currentVideoFile = data.processing.video_filename;
+                // Extract timestamp from video_filename (format: YYYYMMDD_HHMMSS_originalname.ext)
+                const videoFilename = data.processing.video_filename;
+                const timestamp = videoFilename.split('_').slice(0, 2).join('_');
+                currentMetadataFile = timestamp + '_metadata.json';
+                currentVideoFile = videoFilename;
 
                 // Display results
                 displayResults(data);
