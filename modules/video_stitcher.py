@@ -112,6 +112,7 @@ class VideoStitcher:
         
         cmd = [
             'ffmpeg',
+            '-nostdin',                            # Don't wait for stdin (critical for web server)
             '-loop', '1',                          # Loop the image
             '-i', image_path,                      # Input image
             '-i', silent_audio,                    # Pre-made silent audio
@@ -127,11 +128,19 @@ class VideoStitcher:
         ]
         
         try:
-            result = subprocess.run(cmd, check=True, capture_output=True)
+            result = subprocess.run(
+                cmd, 
+                check=True, 
+                capture_output=True,
+                timeout=60  # 60 second timeout
+            )
             logger.info(f"Slate video created: {output_path}")
             return output_path
+        except subprocess.TimeoutExpired:
+            logger.error(f"FFmpeg timed out after 60 seconds")
+            raise RuntimeError("Slate video creation timed out")
         except subprocess.CalledProcessError as e:
-            error_msg = e.stderr.decode() if e.stderr else str(e)
+            error_msg = e.stderr.decode('utf-8', errors='ignore') if e.stderr else str(e)
             logger.error(f"Failed to create slate video: {error_msg}")
             raise RuntimeError(f"FFmpeg failed: {error_msg}")
     
@@ -158,6 +167,7 @@ class VideoStitcher:
         # Slate has silent audio, original has real audio
         cmd = [
             'ffmpeg',
+            '-nostdin',                            # Don't wait for stdin (critical for web server)
             '-i', slate_video_path,                # Input 1: slate (with silent audio)
             '-i', original_video_path,             # Input 2: original (with audio)
             '-filter_complex',
@@ -174,12 +184,20 @@ class VideoStitcher:
         ]
         
         try:
-            result = subprocess.run(cmd, check=True, capture_output=True)
+            result = subprocess.run(
+                cmd, 
+                check=True, 
+                capture_output=True,
+                timeout=120  # 120 second timeout for concatenation
+            )
             logger.info(f"Final video created: {output_path}")
             
             return output_path
             
+        except subprocess.TimeoutExpired:
+            logger.error(f"FFmpeg concatenation timed out after 120 seconds")
+            raise RuntimeError("Video concatenation timed out")
         except subprocess.CalledProcessError as e:
-            error_msg = e.stderr.decode() if e.stderr else str(e)
+            error_msg = e.stderr.decode('utf-8', errors='ignore') if e.stderr else str(e)
             logger.error(f"Failed to concatenate videos: {error_msg}")
             raise RuntimeError(f"FFmpeg concatenation failed: {error_msg}")
