@@ -134,11 +134,9 @@ class SlateGenerator:
         font_80 = self._get_font(80, bold=True)
         font_48 = self._get_font(48, bold=True)
         
-        # Add edit number (orange, large)
-        draw.text(self.EDIT_NUMBER_POS, edit_number, font=font_120, fill=self.ORANGE)
-        
-        # Add slug (orange, large)
-        draw.text(self.SLUG_POS, slug, font=font_80, fill=self.ORANGE)
+        # Add edit number / slug (orange, large) - combined on one line
+        combined_title = f"{edit_number} / {slug}"
+        draw.text(self.EDIT_NUMBER_POS, combined_title, font=font_80, fill=self.ORANGE)
         
         # Add content fields (white text)
         y_pos = self.CONTENT_START_Y
@@ -155,16 +153,12 @@ class SlateGenerator:
         draw.text((130, y_pos), f"Date Shot: {date_shot}", font=font_48, fill=self.WHITE)
         y_pos += self.LINE_HEIGHT
         
-        # Sound
+        # Sound (just the audio type, not description)
         draw.text((130, y_pos), sound, font=font_48, fill=self.WHITE)
         y_pos += self.LINE_HEIGHT
         
-        # Restrictions - Broadcast
-        draw.text((130, y_pos), f"Restrictions: Broadcast: {restrictions_broadcast}", font=font_48, fill=self.WHITE)
-        y_pos += self.LINE_HEIGHT
-        
-        # Restrictions - Digital (indented)
-        draw.text((130, y_pos), f"             Digital: {restrictions_digital}", font=font_48, fill=self.WHITE)
+        # Restrictions (combined on one line)
+        draw.text((130, y_pos), f"Restrictions: {restrictions_broadcast}", font=font_48, fill=self.WHITE)
         
         # Save image
         img.save(output_path, 'PNG')

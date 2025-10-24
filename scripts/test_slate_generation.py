@@ -28,7 +28,7 @@ def main():
     print()
     
     # Configuration
-    guid = "5143-0000-0000-0000"
+    guid = "F29000"
     metadata_file = "test_output_metadata.json"
     video_file = "test clips/Bureij Oct 19 Normalised 50.mp4"
     output_file = "final_videos/test_final_with_slate.mp4"

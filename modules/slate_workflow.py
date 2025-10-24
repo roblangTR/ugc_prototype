@@ -146,7 +146,20 @@ class SlateWorkflow:
             duration_str = "0:00"
         
         date_shot = metadata.get('input_metadata', {}).get('date', 'UNKNOWN DATE').upper()
-        sound = metadata.get('audio_analysis', 'NATURAL')[:50]  # Truncate if too long
+        
+        # Determine audio format: Mute, Natural, or Natural/Language
+        audio_analysis = metadata.get('audio_analysis', '')
+        languages = metadata.get('languages_detected', [])
+        
+        if 'mute' in audio_analysis.lower() or not audio_analysis:
+            sound = 'MUTE'
+        elif languages and len(languages) > 0:
+            # Has speech - list languages
+            lang_str = ' AND '.join([lang.upper() for lang in languages])
+            sound = f'NATURAL WITH {lang_str} SPEECH'
+        else:
+            # Natural sound, no speech
+            sound = 'NATURAL'
         
         restrictions = metadata.get('input_metadata', {}).get('restrictions', 'Access all')
         
