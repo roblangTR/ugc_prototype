@@ -1,0 +1,40 @@
+{
+  "slug": "ISRAEL-PALESTINIANS/GAZA-STRIKE-UGC",
+  "headline": "Eyewitness video shows smoke rising after Gaza airstrike",
+  "video_shows": "THICK SMOKE RISING FROM DAMAGED BUILDINGS / CITYSCAPE OBSCURED BY SMOKE",
+  "shotlist": {
+    "dateline": "GAZA (OCTOBER 19, 2024) (VIDEO OBTAINED BY REUTERS \u2013 Access all)",
+    "shots": [
+      {
+        "number": 1,
+        "description": "THICK SMOKE RISING FROM DAMAGED BUILDINGS IN CITYSCAPE"
+      },
+      {
+        "number": 2,
+        "description": "SMOKE CONTINUING TO RISE OVER DAMAGED BUILDINGS"
+      }
+    ]
+  },
+  "story": "An Israeli airstrike hit a neighbourhood in Gaza on Saturday (October 19), according to eyewitness video obtained by Reuters.\n\nThe footage showed thick plumes of smoke rising from multiple buildings, indicating significant damage in the area. The ongoing conflict between Israel and Palestinian militants has intensified, leading to widespread destruction and casualties in the Gaza Strip.\n\nThe video captured a panoramic view of a densely populated urban area, with several multi-storey residential or commercial buildings visible. Dark grey smoke billowed upwards, obscuring parts of the skyline and suggesting ongoing fires or recent explosions. Some structures appeared partially collapsed or heavily damaged.\n\nReuters was able to independently verify the location by matching distinctive building structures and the general urban layout with satellite imagery of Gaza. The date of the footage was confirmed through the original file metadata.",
+  "verification": {
+    "location_method": "Building structures and urban layout matched satellite imagery",
+    "date_method": "Original file metadata",
+    "confidence": "high"
+  },
+  "visual_analysis": "The video presents an elevated, panoramic view of a densely populated urban area, likely a residential or commercial district. Thick, dark grey smoke billows upwards from multiple points within the cityscape, obscuring several multi-story buildings and a significant portion of the sky. Some buildings appear to have sustained heavy damage, with visible structural collapse or debris. The sky above is partly cloudy, with bright sunlight illuminating the scene, creating a stark contrast with the dark smoke. The primary shot is a long shot to extreme long shot, capturing a wide expanse of the city. The camera movement is mostly static with slight, unsteady handheld sway, typical of UGC. There is a brief, rapid downward movement and then an upward movement, suggesting a reaction or adjustment by the person filming. The composition is dominated by the urban sprawl and the massive plumes of smoke, which occupy a significant portion of the left and central frame. Lighting is natural daylight, with strong sunlight creating some glare and highlighting the texture of the smoke. The primary subjects are the urban landscape and the rising smoke, indicative of ongoing fires or recent explosions. The visual quality is good for UGC, appearing to be shot on a modern smartphone, with high resolution and clear details of the buildings and smoke. The tone is one of destruction, chaos, and urgency, providing a direct visual report of the aftermath of an Israeli airstrike.",
+  "audio_analysis": "The audio features human voices, including shouts and exclamations, suggesting a reaction to the events. Distant rumbling sounds, possibly explosions or heavy machinery, are also audible.",
+  "duration_seconds": 13,
+  "quality": "HD",
+  "confidence_score": 0.95,
+  "clip_id": "metadata_generation",
+  "matched_shot_numbers": [],
+  "is_slate": false,
+  "is_part_of_various": false,
+  "input_metadata": {
+    "event_context": "UGC showing smoke rising out of Gaza neighbourhood after Israeli airstrike",
+    "location": "Gaza",
+    "date": "October 19, 2024",
+    "source": "Video obtained by Reuters",
+    "restrictions": "Access all"
+  }
+}
