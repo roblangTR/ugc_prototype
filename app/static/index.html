@@ -19,12 +19,8 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1800px;
             margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
         }
 
         .header {
@@ -32,6 +28,8 @@
             color: white;
             padding: 30px;
             text-align: center;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .header h1 {
@@ -44,25 +42,56 @@
             font-size: 14px;
         }
 
-        .content {
-            padding: 40px;
+        .three-column-layout {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        @media (max-width: 1200px) {
-            .content {
+        @media (max-width: 1400px) {
+            .three-column-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+            .right-card {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .three-column-layout {
                 grid-template-columns: 1fr;
             }
         }
 
-        .left-column, .right-column {
-            min-width: 0;
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 30px;
+            min-height: 600px;
+        }
+
+        .card-header {
+            border-bottom: 3px solid #D64000;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card-header h2 {
+            color: #404040;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-icon {
+            font-size: 24px;
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         label {
@@ -70,7 +99,7 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: #333;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         input[type="text"],
@@ -79,10 +108,10 @@
         textarea,
         select {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 6px;
+            font-size: 13px;
             transition: border-color 0.3s;
         }
 
@@ -95,13 +124,13 @@
 
         textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 70px;
         }
 
         .file-upload {
             border: 2px dashed #e0e0e0;
             border-radius: 8px;
-            padding: 30px;
+            padding: 25px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
@@ -123,38 +152,60 @@
 
         .file-upload-label {
             color: #666;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .file-name {
             margin-top: 10px;
             color: #D64000;
             font-weight: 600;
+            font-size: 12px;
         }
 
         .btn {
             background: #D64000;
             color: white;
-            padding: 14px 32px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 6px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.2s;
             width: 100%;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(214, 64, 0, 0.4);
             background: #b83600;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(214, 64, 0, 0.3);
         }
 
         .btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #D64000;
+            border: 2px solid #D64000;
+        }
+
+        .btn-secondary:hover {
+            background: #D64000;
+            color: white;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
         }
 
         .loading {
@@ -182,36 +233,18 @@
             100% { transform: rotate(360deg); }
         }
 
-        .results {
-            display: none;
-            margin-top: 30px;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-        }
-
-        .results.active {
-            display: block;
-        }
-
-        .results h2 {
-            color: #404040;
-            margin-bottom: 20px;
-            font-size: 20px;
-        }
-
         .metadata-section {
             margin-bottom: 20px;
             padding: 15px;
-            background: #f5f5f5;
+            background: #f8f8f8;
             border-radius: 6px;
             border-left: 4px solid #D64000;
         }
 
         .metadata-section h3 {
             color: #D64000;
-            font-size: 14px;
-            margin-bottom: 10px;
+            font-size: 12px;
+            margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-weight: 700;
@@ -219,13 +252,14 @@
 
         .metadata-section p {
             color: #404040;
-            line-height: 1.6;
-            font-size: 14px;
+            line-height: 1.5;
+            font-size: 13px;
         }
 
         .shotlist-item {
-            margin-bottom: 8px;
-            padding-left: 15px;
+            margin-bottom: 6px;
+            padding-left: 12px;
+            font-size: 13px;
         }
 
         .error {
@@ -235,6 +269,7 @@
             border-radius: 8px;
             margin-top: 20px;
             display: none;
+            font-size: 13px;
         }
 
         .error.active {
@@ -245,16 +280,16 @@
             display: inline-block;
             background: #4caf50;
             color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
             font-weight: 600;
-            margin-left: 10px;
+            margin-left: 8px;
         }
 
         .date-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-top: 8px;
         }
 
@@ -262,9 +297,9 @@
             background: white;
             color: #D64000;
             border: 2px solid #D64000;
-            padding: 6px 16px;
-            border-radius: 6px;
-            font-size: 13px;
+            padding: 5px 14px;
+            border-radius: 5px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -276,28 +311,27 @@
         }
 
         .video-player-section {
-            background: #f5f5f5;
+            background: #000;
             border-radius: 8px;
-            padding: 20px;
+            overflow: hidden;
             margin-bottom: 20px;
-        }
-
-        .video-player-section h3 {
-            color: #404040;
-            margin-bottom: 15px;
-            font-size: 16px;
-            font-weight: 700;
         }
 
         video {
             width: 100%;
+            display: block;
+        }
+
+        .no-video-placeholder {
+            background: #f5f5f5;
+            padding: 60px 20px;
+            text-align: center;
+            color: #999;
             border-radius: 8px;
-            background: #000;
         }
 
         .guid-section {
-            background: white;
-            border: 2px solid #e0e0e0;
+            background: #f8f8f8;
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
@@ -306,7 +340,7 @@
         .guid-section h3 {
             color: #404040;
             margin-bottom: 15px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
         }
 
@@ -316,7 +350,7 @@
 
         .guid-input-group input {
             font-family: 'Courier New', monospace;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .guid-input-group input.valid {
@@ -333,7 +367,7 @@
             padding: 10px 15px;
             border-radius: 6px;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 16px;
             text-align: center;
             margin-bottom: 15px;
         }
@@ -341,7 +375,7 @@
         .status-message {
             padding: 10px;
             border-radius: 6px;
-            font-size: 13px;
+            font-size: 12px;
             margin-bottom: 15px;
         }
 
@@ -359,95 +393,150 @@
             background: #fff3e0;
             color: #f57c00;
         }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .download-section {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .download-section h3 {
+            color: #404040;
+            margin-bottom: 15px;
+            font-size: 15px;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>🎬 UGC Video Metadata Generator</h1>
-            <p>AI-powered Reuters-style metadata generation</p>
+            <p>AI-powered Reuters-style metadata generation with slate creation</p>
         </div>
 
-        <div class="content">
-            <div class="left-column">
+        <div class="three-column-layout">
+            <!-- LEFT CARD: User Inputs -->
+            <div class="card left-card">
+                <div class="card-header">
+                    <h2><span class="card-icon">📝</span> User Inputs</h2>
+                </div>
+
                 <form id="videoForm">
-                <div class="form-group">
-                    <label for="eventContext">Event Context *</label>
-                    <textarea 
-                        id="eventContext" 
-                        name="event_context" 
-                        required
-                        placeholder="e.g., UGC showing smoke rising out of Gaza neighbourhood after Israeli airstrike"
-                    ></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="location">Location *</label>
-                    <input 
-                        type="text" 
-                        id="location" 
-                        name="location" 
-                        required
-                        placeholder="e.g., Gaza, Nairobi, Kenya"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="date">Date *</label>
-                    <input 
-                        type="text" 
-                        id="date" 
-                        name="date" 
-                        required
-                        placeholder="e.g., October 19, 2024"
-                    >
-                    <div class="date-buttons">
-                        <button type="button" class="date-btn" onclick="setToday()">Today</button>
-                        <button type="button" class="date-btn" onclick="setYesterday()">Yesterday</button>
+                    <div class="form-group">
+                        <label for="eventContext">Event Context *</label>
+                        <textarea 
+                            id="eventContext" 
+                            name="event_context" 
+                            required
+                            placeholder="e.g., UGC showing smoke rising from Gaza after Israeli airstrike"
+                        ></textarea>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="source">Source *</label>
-                    <select id="source" name="source" required>
-                        <option value="">Select source...</option>
-                        <option value="Video obtained by Reuters">Video obtained by Reuters</option>
-                        <option value="Social Media - Twitter">Social Media - Twitter</option>
-                        <option value="Social Media - Instagram">Social Media - Instagram</option>
-                        <option value="Social Media - Facebook">Social Media - Facebook</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="location">Location *</label>
+                        <input 
+                            type="text" 
+                            id="location" 
+                            name="location" 
+                            required
+                            placeholder="e.g., Gaza, Nairobi, Kenya"
+                        >
+                    </div>
 
-                <div class="form-group">
-                    <label for="restrictions">Usage Restrictions</label>
-                    <select id="restrictions" name="restrictions">
-                        <option value="Access all">No restrictions (Access all)</option>
-                        <option value="No resale / No archive">No resale / No archive</option>
-                        <option value="No resale / No archive / Must on-screen courtesy">No resale / No archive / Must on-screen courtesy</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Video File *</label>
-                    <div class="file-upload" id="fileUpload">
-                        <input type="file" id="videoFile" name="video" accept="video/*" required>
-                        <div class="file-upload-label">
-                            📹 Click to select or drag and drop video file<br>
-                            <small>Supported: MP4, MOV, AVI, MKV (max 15MB)</small>
+                    <div class="form-group">
+                        <label for="date">Date *</label>
+                        <input 
+                            type="text" 
+                            id="date" 
+                            name="date" 
+                            required
+                            placeholder="e.g., October 19, 2024"
+                        >
+                        <div class="date-buttons">
+                            <button type="button" class="date-btn" onclick="setToday()">Today</button>
+                            <button type="button" class="date-btn" onclick="setYesterday()">Yesterday</button>
                         </div>
-                        <div class="file-name" id="fileName"></div>
                     </div>
-                </div>
+
+                    <div class="form-group">
+                        <label for="source">Source *</label>
+                        <select id="source" name="source" required>
+                            <option value="">Select source...</option>
+                            <option value="Video obtained by Reuters">Video obtained by Reuters</option>
+                            <option value="Social Media - Twitter">Social Media - Twitter</option>
+                            <option value="Social Media - Instagram">Social Media - Instagram</option>
+                            <option value="Social Media - Facebook">Social Media - Facebook</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="restrictions">Usage Restrictions</label>
+                        <select id="restrictions" name="restrictions">
+                            <option value="Access all">No restrictions (Access all)</option>
+                            <option value="No resale / No archive">No resale / No archive</option>
+                            <option value="No resale / No archive / Must on-screen courtesy">No resale / No archive / Must on-screen courtesy</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Video File *</label>
+                        <div class="file-upload" id="fileUpload">
+                            <input type="file" id="videoFile" name="video" accept="video/*" required>
+                            <div class="file-upload-label">
+                                📹 Click or drag video<br>
+                                <small>MP4, MOV, AVI, MKV (max 15MB)</small>
+                            </div>
+                            <div class="file-name" id="fileName"></div>
+                        </div>
+                    </div>
 
                     <button type="submit" class="btn" id="submitBtn">
-                        Generate Metadata
+                        🚀 Generate Metadata
                     </button>
                 </form>
 
-                <div class="results" id="results">
-                    <h2>Generated Metadata <span class="success-badge">✓ Complete</span></h2>
-                    
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="font-size: 13px;">Analyzing video with Gemini AI...</p>
+                    <p><small style="font-size: 11px;">This may take 30-60 seconds</small></p>
+                </div>
+
+                <div class="error" id="error"></div>
+            </div>
+
+            <!-- MIDDLE CARD: Generated Metadata -->
+            <div class="card middle-card">
+                <div class="card-header">
+                    <h2><span class="card-icon">📄</span> Generated Metadata</h2>
+                </div>
+
+                <div id="metadataEmpty" class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <p>Metadata will appear here after generation</p>
+                </div>
+
+                <div id="metadataContent" style="display: none;">
                     <div class="metadata-section">
                         <h3>SLUG</h3>
                         <p id="slug"></p>
@@ -465,7 +554,7 @@
 
                     <div class="metadata-section">
                         <h3>SHOTLIST</h3>
-                        <p id="dateline" style="font-weight: 600; margin-bottom: 10px;"></p>
+                        <p id="dateline" style="font-weight: 600; margin-bottom: 8px;"></p>
                         <div id="shots"></div>
                     </div>
 
@@ -478,18 +567,35 @@
                         <h3>VERIFICATION</h3>
                         <p id="verification"></p>
                     </div>
+
+                    <div class="action-buttons">
+                        <a href="#" id="downloadMetadataBtn" class="btn" style="display: none;">
+                            📥 Download Metadata JSON
+                        </a>
+                        <button class="btn btn-secondary" onclick="alert('WNE integration coming soon!')">
+                            📤 Send to WNE
+                        </button>
+                        <button class="btn btn-secondary" onclick="alert('VESPA integration coming soon!')">
+                            📤 Import to VESPA
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div class="right-column">
+            <!-- RIGHT CARD: Video Player & Downloads -->
+            <div class="card right-card">
+                <div class="card-header">
+                    <h2><span class="card-icon">🎥</span> Video Player & Downloads</h2>
+                </div>
+
                 <div class="video-player-section">
-                    <h3>📹 Video Preview</h3>
                     <video id="videoPlayer" controls style="display: none;">
                         <source id="videoSource" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
-                    <div id="noVideo" style="text-align: center; padding: 40px; color: #999;">
-                        <p>Final video will appear here after slate generation</p>
+                    <div id="noVideo" class="no-video-placeholder">
+                        <div style="font-size: 48px; margin-bottom: 15px;">🎬</div>
+                        <p>Final video will appear here</p>
                     </div>
                 </div>
 
@@ -504,7 +610,7 @@
                             placeholder="1234-5678-9ABC-DEF0"
                             maxlength="19"
                         >
-                        <small style="color: #666; display: block; margin-top: 5px;">
+                        <small style="color: #666; display: block; margin-top: 5px; font-size: 11px;">
                             Enter at least 4 hex characters (0-9, A-F)
                         </small>
                     </div>
@@ -518,21 +624,15 @@
                     <div id="slateStatus"></div>
 
                     <button class="btn" id="generateSlateBtn" disabled>
-                        Generate Final Video with Slate
+                        🎬 Generate Final Video with Slate
                     </button>
                 </div>
+
+                <div class="download-section" id="downloadSection" style="display: none;">
+                    <h3>Downloads</h3>
+                    <div id="downloadButtons"></div>
+                </div>
             </div>
-        </div>
-
-        <div class="content" style="display: block;">
-
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p>Analyzing video with Gemini AI...</p>
-                <p><small>This may take 30-60 seconds</small></p>
-            </div>
-
-            <div class="error" id="error"></div>
         </div>
     </div>
 
@@ -558,7 +658,7 @@
             document.getElementById('date').value = formatDate(yesterday);
         }
 
-        // Global variables for slate generation
+        // Global variables
         let currentMetadataFile = null;
         let currentVideoFile = null;
 
@@ -567,7 +667,6 @@
         const fileInput = document.getElementById('videoFile');
         const fileName = document.getElementById('fileName');
         const loading = document.getElementById('loading');
-        const results = document.getElementById('results');
         const error = document.getElementById('error');
         const submitBtn = document.getElementById('submitBtn');
 
@@ -577,7 +676,7 @@
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
                 const file = e.target.files[0];
-                fileName.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                fileName.textContent = `✓ ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
             }
         });
 
@@ -598,7 +697,7 @@
             if (e.dataTransfer.files.length > 0) {
                 fileInput.files = e.dataTransfer.files;
                 const file = e.dataTransfer.files[0];
-                fileName.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                fileName.textContent = `✓ ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
             }
         });
 
@@ -606,11 +705,7 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Hide previous results/errors
-            results.classList.remove('active');
             error.classList.remove('active');
-
-            // Show loading
             loading.classList.add('active');
             submitBtn.disabled = true;
 
@@ -628,8 +723,7 @@
 
                 const data = await response.json();
 
-                // Store metadata and video filenames for slate generation
-                // Extract timestamp from video_filename (format: YYYYMMDD_HHMMSS_originalname.ext)
+                // Store metadata and video filenames
                 const videoFilename = data.processing.video_filename;
                 const timestamp = videoFilename.split('_').slice(0, 2).join('_');
                 currentMetadataFile = timestamp + '_metadata.json';
@@ -638,9 +732,13 @@
                 // Display results
                 displayResults(data);
 
-                // Hide loading, show results
+                // Show metadata download button
+                const downloadMetadataBtn = document.getElementById('downloadMetadataBtn');
+                downloadMetadataBtn.href = `/api/outputs/${currentMetadataFile}`;
+                downloadMetadataBtn.download = currentMetadataFile;
+                downloadMetadataBtn.style.display = 'block';
+
                 loading.classList.remove('active');
-                results.classList.add('active');
                 
                 // Show GUID section
                 document.getElementById('guidSection').style.display = 'block';
@@ -656,6 +754,10 @@
         });
 
         function displayResults(data) {
+            // Hide empty state, show content
+            document.getElementById('metadataEmpty').style.display = 'none';
+            document.getElementById('metadataContent').style.display = 'block';
+
             document.getElementById('slug').textContent = data.slug || 'N/A';
             document.getElementById('headline').textContent = data.headline || 'N/A';
             document.getElementById('videoShows').textContent = data.video_shows || 'N/A';
@@ -681,7 +783,7 @@
             if (data.story) {
                 const storyDiv = document.getElementById('story');
                 const paragraphs = data.story.split('\\n\\n');
-                storyDiv.innerHTML = paragraphs.map(p => `<p style="margin-bottom: 15px;">${p}</p>`).join('');
+                storyDiv.innerHTML = paragraphs.map(p => `<p style="margin-bottom: 12px; font-size: 13px;">${p}</p>`).join('');
             }
 
             // Verification
@@ -743,7 +845,6 @@
                 return;
             }
 
-            // Show status
             slateStatus.innerHTML = '<div class="status-message info">⏳ Generating slate and stitching video... This may take 30-60 seconds</div>';
             generateSlateBtn.disabled = true;
 
@@ -764,7 +865,6 @@
 
                 const data = await response.json();
 
-                // Show success
                 slateStatus.innerHTML = `<div class="status-message success">✓ Final video generated! Edit #${data.edit_number} | Duration: ${data.duration_with_slate}</div>`;
 
                 // Load video in player
@@ -773,21 +873,17 @@
                 videoPlayer.style.display = 'block';
                 noVideo.style.display = 'none';
 
-                // Enable download
-                const downloadBtn = document.createElement('a');
-                downloadBtn.href = data.download_url;
-                downloadBtn.download = data.final_video;
-                downloadBtn.className = 'btn';
-                downloadBtn.style.marginTop = '15px';
-                downloadBtn.style.display = 'block';
-                downloadBtn.textContent = '⬇ Download Final Video';
+                // Show download section
+                const downloadSection = document.getElementById('downloadSection');
+                const downloadButtons = document.getElementById('downloadButtons');
                 
-                const guidSection = document.getElementById('guidSection');
-                const existingDownload = guidSection.querySelector('a.btn');
-                if (existingDownload) {
-                    existingDownload.remove();
-                }
-                guidSection.appendChild(downloadBtn);
+                downloadButtons.innerHTML = `
+                    <a href="${data.download_url}" download="${data.final_video}" class="btn" style="margin-bottom: 10px;">
+                        ⬇ Download Final Video
+                    </a>
+                `;
+                
+                downloadSection.style.display = 'block';
 
             } catch (err) {
                 console.error('Slate generation error:', err);
