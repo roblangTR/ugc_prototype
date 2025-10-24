@@ -425,6 +425,32 @@
             font-size: 15px;
             font-weight: 700;
         }
+
+        .btn-wne {
+            background: #123015;
+            color: white;
+            border: none;
+        }
+
+        .btn-wne:hover {
+            background: #0d2310;
+        }
+
+        .btn-vespa {
+            background: #0874E3;
+            color: white;
+            border: none;
+        }
+
+        .btn-vespa:hover {
+            background: #0660c7;
+        }
+
+        .btn-group-horizontal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
     </style>
 </head>
 <body>
@@ -567,18 +593,6 @@
                         <h3>VERIFICATION</h3>
                         <p id="verification"></p>
                     </div>
-
-                    <div class="action-buttons">
-                        <a href="#" id="downloadMetadataBtn" class="btn" style="display: none;">
-                            📥 Download Metadata JSON
-                        </a>
-                        <button class="btn btn-secondary" onclick="alert('WNE integration coming soon!')">
-                            📤 Send to WNE
-                        </button>
-                        <button class="btn btn-secondary" onclick="alert('VESPA integration coming soon!')">
-                            📤 Import to VESPA
-                        </button>
-                    </div>
                 </div>
             </div>
 
@@ -629,7 +643,7 @@
                 </div>
 
                 <div class="download-section" id="downloadSection" style="display: none;">
-                    <h3>Downloads</h3>
+                    <h3>Downloads & Actions</h3>
                     <div id="downloadButtons"></div>
                 </div>
             </div>
@@ -732,16 +746,30 @@
                 // Display results
                 displayResults(data);
 
-                // Show metadata download button
-                const downloadMetadataBtn = document.getElementById('downloadMetadataBtn');
-                downloadMetadataBtn.href = `/api/outputs/${currentMetadataFile}`;
-                downloadMetadataBtn.download = currentMetadataFile;
-                downloadMetadataBtn.style.display = 'block';
-
                 loading.classList.remove('active');
                 
-                // Show GUID section
+                // Show GUID section and download section
                 document.getElementById('guidSection').style.display = 'block';
+                
+                // Show download section with metadata download
+                const downloadSection = document.getElementById('downloadSection');
+                const downloadButtons = document.getElementById('downloadButtons');
+                
+                downloadButtons.innerHTML = `
+                    <a href="/api/outputs/${currentMetadataFile}" download="${currentMetadataFile}" class="btn" style="margin-bottom: 10px;">
+                        Download Metadata JSON
+                    </a>
+                    <div class="btn-group-horizontal">
+                        <button class="btn btn-wne" onclick="alert('WNE integration coming soon!')">
+                            Send to WNE
+                        </button>
+                        <button class="btn btn-vespa" onclick="alert('VESPA integration coming soon!')">
+                            Import to VESPA
+                        </button>
+                    </div>
+                `;
+                
+                downloadSection.style.display = 'block';
 
             } catch (err) {
                 console.error('Error:', err);
@@ -873,17 +901,16 @@
                 videoPlayer.style.display = 'block';
                 noVideo.style.display = 'none';
 
-                // Show download section
-                const downloadSection = document.getElementById('downloadSection');
+                // Update download section with final video download
                 const downloadButtons = document.getElementById('downloadButtons');
-                
-                downloadButtons.innerHTML = `
+                const finalVideoBtn = `
                     <a href="${data.download_url}" download="${data.final_video}" class="btn" style="margin-bottom: 10px;">
-                        ⬇ Download Final Video
+                        Download Final Video
                     </a>
                 `;
                 
-                downloadSection.style.display = 'block';
+                // Prepend final video download to existing buttons
+                downloadButtons.innerHTML = finalVideoBtn + downloadButtons.innerHTML;
 
             } catch (err) {
                 console.error('Slate generation error:', err);
