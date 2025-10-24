@@ -154,19 +154,21 @@ class VideoStitcher:
         """
         logger.info("Concatenating slate and original video")
         
-        # Use filter_complex concat - slate has no audio, original has audio
+        # Use filter_complex concat for both video and audio
+        # Slate has silent audio, original has real audio
         cmd = [
             'ffmpeg',
-            '-i', slate_video_path,                # Input 1: slate (no audio)
+            '-i', slate_video_path,                # Input 1: slate (with silent audio)
             '-i', original_video_path,             # Input 2: original (with audio)
             '-filter_complex',
-            '[0:v][1:v]concat=n=2:v=1[outv]',     # Concat video only
+            '[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[outv][outa]',  # Concat both streams
             '-map', '[outv]',                      # Map concatenated video
-            '-map', '1:a',                         # Map audio from original only
+            '-map', '[outa]',                      # Map concatenated audio
             '-c:v', 'libx264',                     # Encode video
             '-preset', 'fast',                     # Fast encoding
             '-crf', '18',                          # High quality
-            '-c:a', 'copy',                        # Copy original audio
+            '-c:a', 'aac',                         # Encode audio
+            '-b:a', '192k',                        # Audio bitrate
             '-y',                                  # Overwrite output
             output_path
         ]
