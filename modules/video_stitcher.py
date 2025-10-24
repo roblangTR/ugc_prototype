@@ -107,14 +107,16 @@ class VideoStitcher:
         
         width, height = resolution
         
+        # Use pre-generated silent audio file for faster, more reliable slate creation
+        silent_audio = 'app/assets/silent_5s.aac'
+        
         cmd = [
             'ffmpeg',
             '-loop', '1',                          # Loop the image
             '-i', image_path,                      # Input image
-            '-f', 'lavfi',                         # Generate silent audio
-            '-i', 'anullsrc=r=48000:cl=stereo',    # Silent audio track
+            '-i', silent_audio,                    # Pre-made silent audio
             '-c:v', 'libx264',                     # Video codec
-            '-c:a', 'aac',                         # Audio codec
+            '-c:a', 'copy',                        # Copy silent audio (no re-encode)
             '-t', str(duration),                   # Duration
             '-pix_fmt', 'yuv420p',                 # Pixel format for compatibility
             '-r', str(fps),                        # Frame rate
@@ -152,21 +154,19 @@ class VideoStitcher:
         """
         logger.info("Concatenating slate and original video")
         
-        # Use filter_complex concat for reliable concatenation
-        # This properly handles timing and avoids duration issues
+        # Use filter_complex concat - slate has no audio, original has audio
         cmd = [
             'ffmpeg',
-            '-i', slate_video_path,                # Input 1: slate
-            '-i', original_video_path,             # Input 2: original
+            '-i', slate_video_path,                # Input 1: slate (no audio)
+            '-i', original_video_path,             # Input 2: original (with audio)
             '-filter_complex',
-            '[0:v:0][0:a:0][1:v:0][1:a:0]concat=n=2:v=1:a=1[outv][outa]',  # Concat both video and audio
+            '[0:v][1:v]concat=n=2:v=1[outv]',     # Concat video only
             '-map', '[outv]',                      # Map concatenated video
-            '-map', '[outa]',                      # Map concatenated audio
+            '-map', '1:a',                         # Map audio from original only
             '-c:v', 'libx264',                     # Encode video
             '-preset', 'fast',                     # Fast encoding
             '-crf', '18',                          # High quality
-            '-c:a', 'aac',                         # Encode audio
-            '-b:a', '192k',                        # Audio bitrate
+            '-c:a', 'copy',                        # Copy original audio
             '-y',                                  # Overwrite output
             output_path
         ]
